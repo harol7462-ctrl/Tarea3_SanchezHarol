@@ -1,0 +1,52 @@
+---
+title: "Tarea 3 — Proyecto R + Git + Excel"
+author: "Harol Sánchez — C5J614"
+format:
+  html:
+    embed-resources: true
+---
+```{r, include=FALSE}
+library(ggplot2)
+source("cod/funciones_tarea3.R")
+df <-read.csv("data/transacciones_2025.csv", sep = ";")
+parametros <- read.csv("config/parametros_tarea3.csv", sep = ";")
+ventana <- as.numeric(parametros$valor[parametros$parametro == "ventana"])
+k.alerta <- as.numeric(parametros$valor[parametros$parametro == "k.alerta"])
+
+```
+
+## Ejercicio 1 — Alertas por ventana móvil 
+```{r}
+#Con parámetros propios 
+alertas.propias <- alerta.movil(df,ventana, k.alerta)
+#Con párametros comunes
+alertas.comunes <- alerta.movil(df, 7,2) 
+
+#Suma los que son alerta(TRUE) como 1 y los que no como 0(FALSE)
+resultado.1a <- sum(alertas.propias$alerta,na.rm = T) 
+#Muestra el primero de los que dan TRUE(alerta)
+resultado.1b <- alertas.propias$fecha[which(alertas.propias$alerta)[1]] 
+#Lo mismo que en 1a, pero con parámetros diferentes
+resultado.1c <- sum(alertas.comunes$alerta, na.rm = T)
+
+resultado.1a
+
+resultado.1b
+
+resultado.1c
+
+```
+ 
+```{r}
+grafico.1 <- ggplot(alertas.propias, aes(x = as.Date(fecha), y = n.tx)) +
+  geom_line(color = "grey60") +
+  geom_point(data = alertas.propias[alertas.propias$alerta %in% TRUE, ],
+             color = "red", size = 2) +
+  labs(title = "Transacciones diarias y días con alerta",
+       x = "Fecha", y = "Número de transacciones")
+
+grafico.1
+ggsave("info/figuras/ej1_alertas.png", grafico.1, width = 8, height = 4)
+```
+
+
