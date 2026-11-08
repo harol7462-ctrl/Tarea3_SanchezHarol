@@ -36,4 +36,17 @@ resultado.1b
 resultado.1c
 
 ```
+ 
+```{r}
+grafico.1 <- ggplot(alertas.propias, aes(x = as.Date(fecha), y = n.tx)) +
+  geom_line(color = "grey60") +
+  geom_point(data = alertas.propias[alertas.propias$alerta %in% TRUE, ],
+             color = "red", size = 2) +
+  labs(title = "Transacciones diarias y días con alerta",
+       x = "Fecha", y = "Número de transacciones")
+
+grafico.1
+ggsave("info/figuras/ej1_alertas.png", grafico.1, width = 8, height = 4)
+```
+
 
