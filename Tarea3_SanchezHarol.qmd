@@ -18,7 +18,7 @@ k.alerta <- as.numeric(parametros$valor[parametros$parametro == "k.alerta"])
 
 ## Ejercicio 1 — Alertas por ventana móvil 
 ```{r}
-#Con parámetros propios 
+#Con parametros propios 
 alertas.propias <- alerta.movil(df,ventana, k.alerta)
 #Con párametros comunes
 alertas.comunes <- alerta.movil(df, 7,2) 
@@ -27,7 +27,7 @@ alertas.comunes <- alerta.movil(df, 7,2)
 resultado.1a <- sum(alertas.propias$alerta,na.rm = T) 
 #Muestra el primero de los que dan TRUE(alerta)
 resultado.1b <- alertas.propias$fecha[which(alertas.propias$alerta)[1]] 
-#Lo mismo que en 1a, pero con parámetros diferentes
+#Lo mismo que en 1a, pero con parametros diferentes
 resultado.1c <- sum(alertas.comunes$alerta, na.rm = T)
 
 resultado.1a
@@ -146,11 +146,43 @@ va.propio <- valor.acumulado(df, tasa.anual, canal.interes)
 va.comun <- valor.acumulado(df, 0.06, "App")
 
 # 3A
-resultado.3a <- va.propio$va 
+resultado.3a <- round(va.propio$va,2) 
 
 # 3B 
-resultado.3b <- va.propio$interes
+resultado.3b <- round(va.propio$interes,2)
+
+# 3C
+resultado.3c <- va.comun$va 
+
+# Muestra las respuestas.
+cat(sprintf("RESULTADO_3A = %.4f\n", resultado.3a))
+cat("RESULTADO_3B =", resultado.3b, "\n")
+cat("RESULTADO_3C =", resultado.3c, "\n")
 
 ```
+### Gráfico del valor acumulado
+```{r}
+# Tabla por mes que devuelve la función (mes, monto, factor)
+tabla.3 <- va.propio$tabla
 
+datos.grafico.3 <- rbind(
+  data.frame(mes = tabla.3$mes,
+             tipo = "Monto depositado",
+             valor = tabla.3$monto),
+  data.frame(mes = tabla.3$mes,
+             tipo = "Valor al 31-dic",
+             valor = tabla.3$monto * tabla.3$factor)
+)
 
+grafico.3 <- ggplot(datos.grafico.3,
+                    aes(x = factor(mes), y = valor, fill = tipo)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = " M")) +
+  labs(title = paste("Valor acumulado al 31-dic — Canal", canal.interes),
+       x = "Mes", y = "Millones de colones", fill = "") +
+  theme_minimal()
+
+# Muestra el gráfico y lo guarda en info/figuras
+grafico.3
+ggsave("info/figuras/ej3_valor_acumulado.png", grafico.3, width = 8, height = 4)
+``` 
