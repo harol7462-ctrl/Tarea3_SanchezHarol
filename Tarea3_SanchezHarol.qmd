@@ -131,7 +131,7 @@ ggsave(
 #Conclusion 
 # Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
 ```
-##Ejercicio 3 - Valor acumulado con interés 
+## Ejercicio 3 - Valor acumulado con interés 
 ```{r}
 # Se obtienen los parametros de la variable parametros
 # Se usa asnumeric porque la columna valor tiene texto y numeros, por lo que 
@@ -155,9 +155,9 @@ resultado.3b <- round(va.propio$interes,2)
 resultado.3c <- va.comun$va 
 
 # Muestra las respuestas.
-cat(sprintf("RESULTADO_3A = %.4f\n", resultado.3a))
-cat("RESULTADO_3B =", resultado.3b, "\n")
-cat("RESULTADO_3C =", resultado.3c, "\n")
+cat("RESULTADO_3A =", sprintf("%.2f", resultado.3a), "\n")
+cat("RESULTADO_3B =", sprintf("%.2f", resultado.3b), "\n")
+cat("RESULTADO_3C =", sprintf("%.2f", resultado.3c), "\n")
 
 ```
 ### Gráfico del valor acumulado
