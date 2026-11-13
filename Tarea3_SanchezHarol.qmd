@@ -8,6 +8,7 @@ format:
 ```{r, include=FALSE}
 library(ggplot2)
 source("cod/funciones_tarea3.R")
+# Se leen los dos archivos para obtener las transacciones y los parametros
 df <-read.csv("data/transacciones_2025.csv", sep = ";")
 parametros <- read.csv("config/parametros_tarea3.csv", sep = ";")
 ventana <- as.numeric(parametros$valor[parametros$parametro == "ventana"])
@@ -129,6 +130,27 @@ ggsave(
 )
 #Conclusion 
 # Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
+```
+##Ejercicio 3 - Valor acumulado con interés 
+```{r}
+# Se obtienen los parametros de la variable parametros
+# Se usa asnumeric porque la columna valor tiene texto y numeros, por lo que 
+# lee la columna como texto.
+tasa.anual <- as.numeric(parametros$valor[parametros$parametro == "tasa.anual"])
+canal.interes <- parametros$valor[parametros$parametro == "canal.interes"]
+
+# Valor acumulado con parametros propios
+va.propio <- valor.acumulado(df, tasa.anual, canal.interes)
+
+# Valor acumulado con parametros comunes
+va.comun <- valor.acumulado(df, 0.06, "App")
+
+# 3A
+resultado.3a <- va.propio$va 
+
+# 3B 
+resultado.3b <- va.propio$interes
+
 ```
 
 
