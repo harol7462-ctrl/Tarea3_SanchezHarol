@@ -146,10 +146,10 @@ va.propio <- valor.acumulado(df, tasa.anual, canal.interes)
 va.comun <- valor.acumulado(df, 0.06, "App")
 
 # 3A
-resultado.3a <- round(va.propio$va,2) 
+resultado.3a <- va.propio$va
 
 # 3B 
-resultado.3b <- round(va.propio$interes,2)
+resultado.3b <- va.propio$interes
 
 # 3C
 resultado.3c <- va.comun$va 
