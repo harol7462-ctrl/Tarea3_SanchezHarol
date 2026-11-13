@@ -127,6 +127,8 @@ ggsave(
   width = 8,
   height = 4
 )
+#Conclusion 
+# Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
 ```
 
 
