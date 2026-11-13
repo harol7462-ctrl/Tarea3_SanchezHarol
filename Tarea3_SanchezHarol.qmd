@@ -93,8 +93,40 @@ cat("RESULTADO_2B =", resultado.2b, "\n")
 cat("RESULTADO_2C =", resultado.2c, "\n")
 cat("RESULTADO_2D =", resultado.2d, "\n")
 ``` 
-
+### Gráfico de Benford
 ```{r}
 
+montos <- montos.canal[is.finite(montos.canal) & montos.canal > 0]
+digitos <- floor(montos / 10^floor(log10(montos)))
+
+
+tabla.benford <- data.frame(
+  digito = 1:9,
+  observada = tabulate(digitos, nbins = 9) / length(montos),
+  teorica = log10(1 + 1 / (1:9))
+)
+
+grafico.2 <- ggplot(tabla.benford, aes(x = digito)) +
+  geom_col(aes(y = observada), fill = "grey70") +
+  geom_line(aes(y = teorica), color = "steelblue", linewidth = 1) +
+  scale_x_continuous(breaks = 1:9) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  labs(
+    title = paste("Ley de Benford — Canal", canal.benford),
+    subtitle = "Barras: observadas; línea: Benford",
+    x = "Primer dígito",
+    y = "Proporción"
+  ) +
+  theme_minimal()
+
+print(grafico.2)
+
+ggsave(
+  "info/figuras/ej2_benford.png",
+  plot = grafico.2,
+  width = 8,
+  height = 4
+)
 ```
+
 
