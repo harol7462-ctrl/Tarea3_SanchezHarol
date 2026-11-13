@@ -48,5 +48,47 @@ grafico.1 <- ggplot(alertas.propias, aes(x = as.Date(fecha), y = n.tx)) +
 grafico.1
 ggsave("info/figuras/ej1_alertas.png", grafico.1, width = 8, height = 4)
 ```
+## Ejercicio 2 — Ley de Benford por cantón
+```{r}
 
+source("cod/funciones_tarea3.R")
 
+#2A
+# Se Lee la tabla donde están los nombres de los cantones.
+cantones <- read.csv("data/cantones.csv", sep = ",")
+
+# Obtiene el canal a comparar con la ley de benford de los paramtros 
+canal.benford <- parametros$valor[
+  parametros$parametro == "canal.benford"
+]
+
+# Calcula la MAD por canton del canal propio(asignado).
+benford.propio <- benford.canton(df, canal.benford, cantones)
+
+# Calcula la MAD por cantón para el canal Web.
+benford.web <- benford.canton(df, "Web", cantones)
+
+# Se escogen los montos que sean diferentes a NA y que pertenezcan al canal asignado.
+  montos.canal <- df$monto_crc[
+  !is.na(df$canal) & df$canal == canal.benford]
+  
+  resultado.2a <- benford.mad(montos.canal)
+# 2B 
+# Como están ordenados de mayor a menor, el canton de la primera fila tiene la MAD más alta
+resultado.2b <- benford.propio$canton[1]
+
+# 2C 
+# Si el canton cumple la condicion vale 1, sino 0. 
+
+resultado.2c <- sum(benford.propio$mad > 0.015, na.rm = TRUE)
+
+# 2D
+# La tabla (de cantones con canal web) está ordenada de manera descendente con respecto a la # MAD, por lo que la primera fila tiene al canton mayor MAD en canal Web. 
+
+resultado.2d <- benford.web$canton[1]
+
+# Muestra las respuestas.
+cat(sprintf("RESULTADO_2A = %.4f\n", resultado.2a))
+cat("RESULTADO_2B =", resultado.2b, "\n")
+cat("RESULTADO_2C =", resultado.2c, "\n")
+cat("RESULTADO_2D =", resultado.2d, "\n")
