@@ -92,3 +92,9 @@ cat(sprintf("RESULTADO_2A = %.4f\n", resultado.2a))
 cat("RESULTADO_2B =", resultado.2b, "\n")
 cat("RESULTADO_2C =", resultado.2c, "\n")
 cat("RESULTADO_2D =", resultado.2d, "\n")
+``` 
+
+```{r}
+
+```
+
