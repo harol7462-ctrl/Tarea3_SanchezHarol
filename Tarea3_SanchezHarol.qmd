@@ -134,12 +134,6 @@ resultado.2c <- sum(benford.propio$mad > 0.015, na.rm = TRUE)
 # La tabla (de cantones con canal web) está ordenada de manera descendente con respecto a la # MAD, por lo que la primera fila tiene al canton mayor MAD en canal Web. 
 
 resultado.2d <- benford.web$canton[1]
-
-# Muestra las respuestas.
-cat(sprintf("RESULTADO_2A = %.4f\n", resultado.2a))
-cat("RESULTADO_2B =", resultado.2b, "\n")
-cat("RESULTADO_2C =", resultado.2c, "\n")
-cat("RESULTADO_2D =", resultado.2d, "\n")
 ``` 
 ### Gráfico de Benford
 ```{r}
@@ -200,11 +194,6 @@ resultado.3b <- va.propio$interes
 
 # 3C
 resultado.3c <- va.comun$va 
-
-# Muestra las respuestas.
-cat("RESULTADO_3A =", sprintf("%.2f", resultado.3a), "\n")
-cat("RESULTADO_3B =", sprintf("%.2f", resultado.3b), "\n")
-cat("RESULTADO_3C =", sprintf("%.2f", resultado.3c), "\n")
 
 ```
 ### Gráfico del valor acumulado
