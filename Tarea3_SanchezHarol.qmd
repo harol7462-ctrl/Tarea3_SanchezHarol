@@ -170,7 +170,7 @@ ggsave(
   height = 4
 )
 ```
-**Conclusión:** Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
+**Conclusión:** Montes de Oro tiene pocas transacciones, lo que puede explicar su MAD tan alta. 
 
 
 ## Ejercicio 3 - Valor acumulado con interés 
