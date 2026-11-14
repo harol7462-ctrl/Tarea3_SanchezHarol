@@ -169,9 +169,10 @@ ggsave(
   width = 8,
   height = 4
 )
-#Conclusion 
-# Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
 ```
+**Conclusión:** Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
+
+
 ## Ejercicio 3 - Valor acumulado con interés 
 ```{r}
 # Se obtienen los parametros de la variable parametros
@@ -221,3 +222,4 @@ grafico.3 <- ggplot(datos.grafico.3,
 # Muestra el gráfico y lo guarda en info/figuras
 grafico.3
 ggsave("info/figuras/ej3_valor_acumulado.png", grafico.3, width = 8, height = 4)
+```
