@@ -111,4 +111,54 @@ benford.canton <- function(df, canal, cantones) {
   resumen |>
     select(cod_canton, canton, n, mad, clase) |>
     arrange(desc(mad))
+} 
+
+
+# Recibe las transacciones, la tasa efectiva anual y el canal.
+# Devuelve una lista con la tabla con los montos de cada mes,tasa mensual, valor acumulado y intereses ganados.
+valor.acumulado <- function(df, tasa.anual, canal) {
+  
+  # Selecciona las transacciones del canal solicitado y verifica que sean validas (diferentes de NA)
+  transacciones.canal <- df[
+    !is.na(df$canal) & df$canal == canal,
+  ]
+  
+  # A partir de la fecha de cada transaccion, se extrae el mes. 
+  transacciones.canal$mes <- as.integer(
+    format(as.Date(transacciones.canal$fecha), "%m")
+  )
+  
+  # Se agrupa por mes las transacciones, se muestra la suma de los montos para cada mes y se desagrupa.
+  tabla <- transacciones.canal |>
+    group_by(mes) |>
+    summarise(
+      monto = sum(monto_crc),
+      .groups = "drop"
+    )
+  
+  # Se construye una tabla con los doce meses y se le unen las transacciones por mes, quedando algunos sin transacciones.
+  tabla <- data.frame(mes = 1:12) |>
+    left_join(tabla, by = "mes")
+  #Se convierten los NA a 0. 
+  tabla$monto[is.na(tabla$monto)] <- 0
+  
+  # Calcula la tasa efectiva mensual equivalente.En base a la ecuacion (1+im)^12=(1+i)
+  tasa.mensual <- (1 + tasa.anual)^(1 / 12) - 1
+  
+  # El factor de acumulacion se obtiene de multiplicar por (1+im) elevado al numero de periodos que faltan.
+  tabla$factor <- (1 + tasa.mensual)^(12 - tabla$mes)
+  
+  # Formulas para el valor acumulado y el interés.
+  # Suma del monto del monto de cada més multiplicado por el valor de acumulación.
+  va <- sum(tabla$monto * tabla$factor)
+  # El interés es el valor acumulado menos la suma de los montos. 
+  interes <- va - sum(tabla$monto)
+  
+  # Se devuelve la lista con la tabla, la tasa mensual, el valor acumulado y el interés ganado.
+  list(
+    tabla = tabla,
+    tasa.mensual = tasa.mensual,
+    va = va,
+    interes = interes
+  )
 }

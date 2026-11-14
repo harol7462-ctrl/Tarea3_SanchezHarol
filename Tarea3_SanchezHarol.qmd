@@ -8,6 +8,7 @@ format:
 ```{r, include=FALSE}
 library(ggplot2)
 source("cod/funciones_tarea3.R")
+# Se leen los dos archivos para obtener las transacciones y los parametros
 df <-read.csv("data/transacciones_2025.csv", sep = ";")
 parametros <- read.csv("config/parametros_tarea3.csv", sep = ";")
 ventana <- as.numeric(parametros$valor[parametros$parametro == "ventana"])
@@ -17,7 +18,7 @@ k.alerta <- as.numeric(parametros$valor[parametros$parametro == "k.alerta"])
 
 ## Ejercicio 1 — Alertas por ventana móvil 
 ```{r}
-#Con parámetros propios 
+#Con parametros propios 
 alertas.propias <- alerta.movil(df,ventana, k.alerta)
 #Con párametros comunes
 alertas.comunes <- alerta.movil(df, 7,2) 
@@ -26,7 +27,7 @@ alertas.comunes <- alerta.movil(df, 7,2)
 resultado.1a <- sum(alertas.propias$alerta,na.rm = T) 
 #Muestra el primero de los que dan TRUE(alerta)
 resultado.1b <- alertas.propias$fecha[which(alertas.propias$alerta)[1]] 
-#Lo mismo que en 1a, pero con parámetros diferentes
+#Lo mismo que en 1a, pero con parametros diferentes
 resultado.1c <- sum(alertas.comunes$alerta, na.rm = T)
 
 resultado.1a
@@ -130,5 +131,58 @@ ggsave(
 #Conclusion 
 # Montes de Oro tiene la mayor MAD, con 695 transacciones que podrían explicar parte de la desviación, sin implicar fraude.
 ```
+## Ejercicio 3 - Valor acumulado con interés 
+```{r}
+# Se obtienen los parametros de la variable parametros
+# Se usa asnumeric porque la columna valor tiene texto y numeros, por lo que 
+# lee la columna como texto.
+tasa.anual <- as.numeric(parametros$valor[parametros$parametro == "tasa.anual"])
+canal.interes <- parametros$valor[parametros$parametro == "canal.interes"]
 
+# Valor acumulado con parametros propios
+va.propio <- valor.acumulado(df, tasa.anual, canal.interes)
 
+# Valor acumulado con parametros comunes
+va.comun <- valor.acumulado(df, 0.06, "App")
+
+# 3A
+resultado.3a <- va.propio$va
+
+# 3B 
+resultado.3b <- va.propio$interes
+
+# 3C
+resultado.3c <- va.comun$va 
+
+# Muestra las respuestas.
+cat("RESULTADO_3A =", sprintf("%.2f", resultado.3a), "\n")
+cat("RESULTADO_3B =", sprintf("%.2f", resultado.3b), "\n")
+cat("RESULTADO_3C =", sprintf("%.2f", resultado.3c), "\n")
+
+```
+### Gráfico del valor acumulado
+```{r}
+# Tabla por mes que devuelve la función (mes, monto, factor)
+tabla.3 <- va.propio$tabla
+
+datos.grafico.3 <- rbind(
+  data.frame(mes = tabla.3$mes,
+             tipo = "Monto depositado",
+             valor = tabla.3$monto),
+  data.frame(mes = tabla.3$mes,
+             tipo = "Valor al 31-dic",
+             valor = tabla.3$monto * tabla.3$factor)
+)
+
+grafico.3 <- ggplot(datos.grafico.3,
+                    aes(x = factor(mes), y = valor, fill = tipo)) +
+  geom_col(position = "dodge") +
+  scale_y_continuous(labels = scales::label_number(scale = 1e-6, suffix = " M")) +
+  labs(title = paste("Valor acumulado al 31-dic — Canal", canal.interes),
+       x = "Mes", y = "Millones de colones", fill = "") +
+  theme_minimal()
+
+# Muestra el gráfico y lo guarda en info/figuras
+grafico.3
+ggsave("info/figuras/ej3_valor_acumulado.png", grafico.3, width = 8, height = 4)
+``` 
