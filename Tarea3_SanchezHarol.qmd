@@ -16,6 +16,53 @@ k.alerta <- as.numeric(parametros$valor[parametros$parametro == "k.alerta"])
 
 ```
 
+```{r}
+#| echo: false
+#| comment: ""
+# Hoja de respuestas: se calculan aquí para que el .html abra con el bloque.
+
+# Ejercicio 1
+alertas.propias <- alerta.movil(df, ventana, k.alerta)
+alertas.comunes <- alerta.movil(df, 7, 2)
+resultado.1a <- sum(alertas.propias$alerta, na.rm = TRUE)
+resultado.1b <- alertas.propias$fecha[which(alertas.propias$alerta)[1]]
+resultado.1c <- sum(alertas.comunes$alerta, na.rm = TRUE)
+
+# Ejercicio 2
+cantones <- read.csv("data/cantones.csv", sep = ",")
+canal.benford <- parametros$valor[parametros$parametro == "canal.benford"]
+benford.propio <- benford.canton(df, canal.benford, cantones)
+benford.web <- benford.canton(df, "Web", cantones)
+resultado.2a <- benford.mad(df$monto_crc[!is.na(df$canal) & df$canal == canal.benford])
+resultado.2b <- benford.propio$canton[1]
+resultado.2c <- sum(benford.propio$mad > 0.015, na.rm = TRUE)
+resultado.2d <- benford.web$canton[1]
+
+# Ejercicio 3
+tasa.anual <- as.numeric(parametros$valor[parametros$parametro == "tasa.anual"])
+canal.interes <- parametros$valor[parametros$parametro == "canal.interes"]
+va.propio <- valor.acumulado(df, tasa.anual, canal.interes)
+va.comun <- valor.acumulado(df, 0.06, "App")
+resultado.3a <- va.propio$va
+resultado.3b <- va.propio$interes
+resultado.3c <- va.comun$va
+
+# Imprime el bloque con el formato exacto
+cat(
+  "RESULTADO_1A = ", resultado.1a, "\n",
+  "RESULTADO_1B = ", format(resultado.1b), "\n",
+  "RESULTADO_1C = ", resultado.1c, "\n",
+  "RESULTADO_2A = ", sprintf("%.4f", resultado.2a), "\n",
+  "RESULTADO_2B = ", resultado.2b, "\n",
+  "RESULTADO_2C = ", resultado.2c, "\n",
+  "RESULTADO_2D = ", resultado.2d, "\n",
+  "RESULTADO_3A = ", sprintf("%.2f", resultado.3a), "\n",
+  "RESULTADO_3B = ", sprintf("%.2f", resultado.3b), "\n",
+  "RESULTADO_3C = ", sprintf("%.2f", resultado.3c), "\n",
+  sep = ""
+)
+```
+
 ## Ejercicio 1 — Alertas por ventana móvil 
 ```{r}
 #Con parametros propios 
@@ -185,4 +232,3 @@ grafico.3 <- ggplot(datos.grafico.3,
 # Muestra el gráfico y lo guarda en info/figuras
 grafico.3
 ggsave("info/figuras/ej3_valor_acumulado.png", grafico.3, width = 8, height = 4)
-``` 
