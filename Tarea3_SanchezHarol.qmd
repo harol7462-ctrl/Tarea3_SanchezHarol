@@ -19,7 +19,7 @@ k.alerta <- as.numeric(parametros$valor[parametros$parametro == "k.alerta"])
 ```{r}
 #| echo: false
 #| comment: ""
-# Hoja de respuestas: se calculan aquí para que el .html abra con el bloque.
+# Se calculan los resultados al inicio para que el html empiece con la hoja de respuestas
 
 # Ejercicio 1
 alertas.propias <- alerta.movil(df, ventana, k.alerta)
