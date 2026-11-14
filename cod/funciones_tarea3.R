@@ -17,7 +17,7 @@ alerta.movil <-function(df,ventana,k.alerta){
   conteo$desv= NA 
   conteo$alerta =NA
   
-  #Los primeros v dias no se cuentan
+  #Los primeros v dias no se evaluan 
   for(t in ((ventana + 1): nrow(conteo))) {
     previos <- conteo$n.tx[(t-ventana):(t-1)]
     conteo$media[t]  <- mean(previos)
